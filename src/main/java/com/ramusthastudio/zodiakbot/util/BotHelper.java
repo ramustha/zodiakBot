@@ -1,5 +1,6 @@
 package com.ramusthastudio.zodiakbot.util;
 
+import com.linecorp.bot.client.LineMessagingService;
 import com.linecorp.bot.client.LineMessagingServiceBuilder;
 import com.linecorp.bot.model.Multicast;
 import com.linecorp.bot.model.PushMessage;
@@ -14,11 +15,18 @@ import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.net.ssl.SSLContext;
+import okhttp3.ConnectionSpec;
+import okhttp3.OkHttpClient;
+import okhttp3.TlsVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Response;
@@ -56,12 +64,49 @@ public final class BotHelper {
   public static final String KEY_FRIEND = "teman";
   public static final String KEY_AMA = "ama";
 
+  private static LineMessagingService lineServiceBuilder(String aChannelAccessToken) {
+    OkHttpClient.Builder client = new OkHttpClient.Builder()
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .retryOnConnectionFailure(true)
+        .cache(null)
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS);
+
+    LOG.info("starting line messaging service...");
+    return LineMessagingServiceBuilder
+        .create(aChannelAccessToken)
+        .okHttpClientBuilder(enableTls12(client))
+        .build();
+  }
+
+  public static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client) {
+    try {
+      SSLContext sc = SSLContext.getInstance("TLSv1.2");
+      sc.init(null, null, null);
+      client.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
+
+      ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+          .tlsVersions(TlsVersion.TLS_1_2)
+          .build();
+
+      List<ConnectionSpec> specs = new ArrayList<>();
+      specs.add(cs);
+      specs.add(ConnectionSpec.COMPATIBLE_TLS);
+      specs.add(ConnectionSpec.CLEARTEXT);
+
+      client.connectionSpecs(specs);
+    } catch (Exception exc) {
+      LOG.error("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
+    }
+    return client;
+  }
+
   public static UserProfileResponse getUserProfile(String aChannelAccessToken,
       String aUserId) throws IOException {
     LOG.info("getUserProfile...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().getProfile(aUserId).execute().body();
+    return lineServiceBuilder(aChannelAccessToken).getProfile(aUserId).execute().body();
   }
 
   public static Response<BotApiResponse> replayMessage(String aChannelAccessToken, String aReplayToken,
@@ -69,9 +114,7 @@ public final class BotHelper {
     TextMessage message = new TextMessage(aMsg);
     ReplyMessage pushMessage = new ReplyMessage(aReplayToken, message);
     LOG.info("replayMessage...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().replyMessage(pushMessage).execute();
+    return lineServiceBuilder(aChannelAccessToken).replyMessage(pushMessage).execute();
   }
 
   public static Response<BotApiResponse> pushMessage(String aChannelAccessToken, String aUserId,
@@ -79,9 +122,7 @@ public final class BotHelper {
     TextMessage message = new TextMessage(aMsg);
     PushMessage pushMessage = new PushMessage(aUserId, message);
     LOG.info("pushMessage...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().pushMessage(pushMessage).execute();
+    return lineServiceBuilder(aChannelAccessToken).pushMessage(pushMessage).execute();
   }
 
   public static Response<BotApiResponse> multicastMessage(String aChannelAccessToken, Set<String> aUserIds,
@@ -89,9 +130,7 @@ public final class BotHelper {
     TextMessage message = new TextMessage(aMsg);
     Multicast pushMessage = new Multicast(aUserIds, message);
     LOG.info("multicastMessage...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().multicast(pushMessage).execute();
+    return lineServiceBuilder(aChannelAccessToken).multicast(pushMessage).execute();
   }
 
   public static Response<BotApiResponse> templateMessage(String aChannelAccessToken, String aUserId,
@@ -99,9 +138,7 @@ public final class BotHelper {
     TemplateMessage message = new TemplateMessage("Result", aTemplate);
     PushMessage pushMessage = new PushMessage(aUserId, message);
     LOG.info("templateMessage...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().pushMessage(pushMessage).execute();
+    return lineServiceBuilder(aChannelAccessToken).pushMessage(pushMessage).execute();
   }
 
   public static Response<BotApiResponse> stickerMessage(String aChannelAccessToken, String aUserId,
@@ -109,9 +146,7 @@ public final class BotHelper {
     StickerMessage message = new StickerMessage(aSt.pkgId(), aSt.id());
     PushMessage pushMessage = new PushMessage(aUserId, message);
     LOG.info("stickerMessage...");
-    return LineMessagingServiceBuilder
-        .create(aChannelAccessToken)
-        .build().pushMessage(pushMessage).execute();
+    return lineServiceBuilder(aChannelAccessToken).pushMessage(pushMessage).execute();
   }
 
   public static Response<BotApiResponse> profileUserMessage(String aChannelAccessToken, String aUserId, User aUser) throws IOException {
