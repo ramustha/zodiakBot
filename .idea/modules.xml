@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/zodiakBot.iml" filepath="$PROJECT_DIR$/.idea/zodiakBot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zodiakbot.iml" filepath="$PROJECT_DIR$/.idea/modules/zodiakbot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zodiakbot_main.iml" filepath="$PROJECT_DIR$/.idea/modules/zodiakbot_main.iml" group="zodiakbot" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zodiakbot_test.iml" filepath="$PROJECT_DIR$/.idea/modules/zodiakbot_test.iml" group="zodiakbot" />
     </modules>
   </component>
 </project>
