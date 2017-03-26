@@ -1,7 +1,6 @@
 package com.ramusthastudio.zodiakbot.controller;
 
 import com.google.gson.Gson;
-import com.linecorp.bot.client.LineSignatureValidator;
 import com.ramusthastudio.zodiakbot.model.Events;
 import com.ramusthastudio.zodiakbot.model.Message;
 import com.ramusthastudio.zodiakbot.model.Payload;
@@ -24,9 +23,6 @@ import static com.ramusthastudio.zodiakbot.util.BotHelper.FOLLOW;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.MESSAGE;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.MESSAGE_TEXT;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.POSTBACK;
-import static com.ramusthastudio.zodiakbot.util.BotHelper.SOURCE_GROUP;
-import static com.ramusthastudio.zodiakbot.util.BotHelper.SOURCE_ROOM;
-import static com.ramusthastudio.zodiakbot.util.BotHelper.SOURCE_USER;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.UNFOLLOW;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.greetingMessage;
 import static com.ramusthastudio.zodiakbot.util.BotHelper.instructionSentimentMessage;
@@ -58,10 +54,11 @@ public class LineBotController {
     // final boolean valid = new LineSignatureValidator(fChannelSecret.getBytes()).validateSignature(aPayload.getBytes(), aXLineSignature);
     // LOG.info("The Signature is: {} ", valid ? "valid" : "tidak valid");
 
-    if (aPayload != null && aPayload.length() > 0) {
+    LOG.info("Start getting payload ");
+    try {
+
       Gson gson = new Gson();
       Payload payload = gson.fromJson(aPayload, Payload.class);
-
       Events event = payload.events()[0];
 
       String eventType = event.type();
@@ -74,18 +71,39 @@ public class LineBotController {
       String userId = source.userId();
       String sourceType = source.type();
 
-      switch (sourceType) {
-        case SOURCE_USER:
-          sourceUserProccess(eventType, replayToken, timestamp, message, postback, userId);
-          break;
-        case SOURCE_GROUP:
-          // sourceGroupProccess(eventType, replayToken, postback, message, source);
-          break;
-        case SOURCE_ROOM:
-          // sourceGroupProccess(eventType, replayToken, postback, message, source);
-          break;
-      }
+      LOG.info("source type : {} ", sourceType);
+    } catch (Exception ae) {
+      LOG.error("Erro process payload : {} ", ae.getMessage());
     }
+
+    // if (aPayload != null && aPayload.length() > 0) {
+    //   Gson gson = new Gson();
+    //   Payload payload = gson.fromJson(aPayload, Payload.class);
+    //
+    //   Events event = payload.events()[0];
+    //
+    //   String eventType = event.type();
+    //   String replayToken = event.replyToken();
+    //   Source source = event.source();
+    //   long timestamp = event.timestamp();
+    //   Message message = event.message();
+    //   Postback postback = event.postback();
+    //
+    //   String userId = source.userId();
+    //   String sourceType = source.type();
+    //
+    //   switch (sourceType) {
+    //     case SOURCE_USER:
+    //       sourceUserProccess(eventType, replayToken, timestamp, message, postback, userId);
+    //       break;
+    //     case SOURCE_GROUP:
+    //       // sourceGroupProccess(eventType, replayToken, postback, message, source);
+    //       break;
+    //     case SOURCE_ROOM:
+    //       // sourceGroupProccess(eventType, replayToken, postback, message, source);
+    //       break;
+    //   }
+    // }
 
     return new ResponseEntity<>(HttpStatus.OK);
   }
