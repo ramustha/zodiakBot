@@ -15,6 +15,7 @@ import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
 import java.io.IOException;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
@@ -74,7 +79,7 @@ public final class BotHelper {
         .writeTimeout(5, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS);
 
-    LOG.info("starting line messaging service...");
+    LOG.info("Starting line messaging service...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
         .okHttpClientBuilder(enableTls12(client))
@@ -83,9 +88,20 @@ public final class BotHelper {
 
   public static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client) {
     try {
-      SSLContext sc = SSLContext.getInstance("TLSv1.2");
-      sc.init(null, null, null);
-      client.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
+      TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+          TrustManagerFactory.getDefaultAlgorithm());
+      trustManagerFactory.init((KeyStore) null);
+      TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+      if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+        throw new IllegalStateException("Unexpected default trust managers:"
+            + Arrays.toString(trustManagers));
+      }
+      X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
+
+      SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+      sslContext.init(null, new TrustManager[] {trustManager}, null);
+      SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+      client.sslSocketFactory(sslSocketFactory, trustManager);
 
       ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
           .tlsVersions(TlsVersion.TLS_1_2)
@@ -98,7 +114,7 @@ public final class BotHelper {
 
       client.connectionSpecs(specs);
     } catch (Exception exc) {
-      LOG.error("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
+      LOG.error("Error while setting TLS 1.2 {}", exc.getMessage());
     }
     return client;
   }
