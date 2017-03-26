@@ -79,7 +79,7 @@ public final class BotHelper {
         .writeTimeout(5, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS);
 
-    LOG.info("Starting line messaging service to 1.0...");
+    LOG.info("Starting line messaging service to TLSv1...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
         .okHttpClientBuilder(enableTls12(client))
@@ -98,7 +98,7 @@ public final class BotHelper {
       }
       X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
-      SSLContext sslContext = SSLContext.getInstance("TLSv1");
+      SSLContext sslContext = SSLContext.getInstance("TLS_1_0");
       sslContext.init(null, new TrustManager[] {trustManager}, null);
       SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
       client.sslSocketFactory(sslSocketFactory, trustManager);
@@ -114,7 +114,7 @@ public final class BotHelper {
 
       client.connectionSpecs(specs);
     } catch (Exception exc) {
-      LOG.error("Error while setting TLS 1.0 {}", exc.getMessage());
+      LOG.error("Error while setting TLS TLS_1_0 {}", exc.getMessage());
     }
     return client;
   }
