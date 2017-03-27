@@ -92,7 +92,7 @@ public final class BotHelper {
       if ("IBM J9 VM".equals(System.getProperty("java.vm.name"))) {
         sslContext = SSLContext.getInstance("SSL");
       }
-      LOG.info("Ssl Context " + System.getProperty("java.vm.name"));
+      LOG.info("Ssl Context {} and {} ", System.getProperty("java.vm.name"), sslContext.getProtocol());
       sslContext.init(null, new TrustManager[] {trustManager}, null);
       SSLSocketFactory sslSocketFactory
           = new DelegatingSSLSocketFactory(sslContext.getSocketFactory()) {
@@ -108,7 +108,6 @@ public final class BotHelper {
       client
           .sslSocketFactory(sslSocketFactory, trustManager)
           .retryOnConnectionFailure(false)
-          .cache(null)
           .connectTimeout(5, TimeUnit.SECONDS)
           .writeTimeout(5, TimeUnit.SECONDS)
           .readTimeout(5, TimeUnit.SECONDS);
