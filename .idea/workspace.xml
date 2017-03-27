@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="635ddb28-a259-4e72-a209-d66bfb0c8901" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okhttp3_logging_interceptor_3_6_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okhttp3_okhttp_3_6_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okio_okio_1_11_0.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/zodiakbot_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/zodiakbot_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/zodiakbot_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/zodiakbot_test.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ramusthastudio/zodiakbot/util/BotHelper.java" afterPath="$PROJECT_DIR$/src/main/java/com/ramusthastudio/zodiakbot/util/BotHelper.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -108,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/ramusthastudio/zodiakbot/util/BotHelper.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="232">
-              <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+              <caret line="75" column="17" lean-forward="true" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1192,12 +1186,12 @@
       <updated>1490499674515</updated>
       <workItem from="1490503890418" duration="113000" />
       <workItem from="1490504011086" duration="13897000" />
-      <workItem from="1490619319548" duration="7528000" />
+      <workItem from="1490619319548" duration="8489000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21538000" />
+    <option name="totallyTimeSpent" value="22499000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1098" extended-state="6" />
@@ -1436,13 +1430,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/jre/lib/rt.jar!/javax/net/ssl/SSLContext.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="57" column="50" lean-forward="false" selection-start-line="57" selection-start-column="46" selection-end-line="57" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.4.2/27f62476dfeacb8e8d2595988cd67995e65e9a42/okhttp-3.4.2-sources.jar!/okhttp3/ConnectionSpec.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="839">
@@ -1608,10 +1595,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/jre/lib/rt.jar!/javax/net/ssl/SSLContext.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="73" column="24" lean-forward="false" selection-start-line="73" selection-start-column="16" selection-end-line="73" selection-end-column="24" />
+          <folding>
+            <element signature="e#2494#2495#0" expanded="true" />
+            <element signature="e#2524#2525#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ramusthastudio/zodiakbot/util/BotHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
-          <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+          <caret line="75" column="17" lean-forward="true" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
