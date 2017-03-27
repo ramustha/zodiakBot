@@ -1,6 +1,7 @@
 package com.ramusthastudio.zodiakbot.util;
 
 import com.linecorp.bot.client.LineMessagingService;
+import com.linecorp.bot.client.LineMessagingServiceBuilder;
 import com.linecorp.bot.model.Multicast;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
@@ -13,7 +14,6 @@ import com.linecorp.bot.model.message.template.ConfirmTemplate;
 import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
-import com.ramusthastudio.zodiakbot.http.NewLineMessagingServiceBuilder;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -79,10 +79,10 @@ public final class BotHelper {
         .writeTimeout(5, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS);
 
-    LOG.info("Starting new line messaging service...");
-    return NewLineMessagingServiceBuilder
+    LOG.info("Starting new line messaging service TLSv1.3...");
+    return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
-        // .okHttpClientBuilder(enableTls12(client))
+        .okHttpClientBuilder(enableTls12(client))
         .build();
   }
 
@@ -98,13 +98,13 @@ public final class BotHelper {
       }
       X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
-      SSLContext sslContext = SSLContext.getInstance("SSL_TLSv2");
+      SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
       sslContext.init(null, new TrustManager[] {trustManager}, null);
       SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
       client.sslSocketFactory(sslSocketFactory, trustManager);
 
       ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-          .tlsVersions(TlsVersion.TLS_1_0)
+          .tlsVersions(TlsVersion.TLS_1_3)
           .build();
 
       List<ConnectionSpec> specs = new ArrayList<>();
@@ -114,7 +114,7 @@ public final class BotHelper {
 
       client.connectionSpecs(specs);
     } catch (Exception exc) {
-      LOG.error("Error while setting TLS 1.0 {}", exc.getMessage());
+      LOG.error("Error while setting TLSv1.3 {}", exc.getMessage());
     }
     return client;
   }
