@@ -14,22 +14,21 @@ import com.linecorp.bot.model.message.template.ConfirmTemplate;
 import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
+import com.ramusthastudio.zodiakbot.http.DelegatingSSLSocketFactory;
 import java.io.IOException;
 import java.security.KeyStore;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 import org.slf4j.Logger;
@@ -70,23 +69,14 @@ public final class BotHelper {
   public static final String KEY_AMA = "ama";
 
   private static LineMessagingService lineServiceBuilder(String aChannelAccessToken) {
-    OkHttpClient.Builder client = new OkHttpClient.Builder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .retryOnConnectionFailure(true)
-        .cache(null)
-        .connectTimeout(5, TimeUnit.SECONDS)
-        .writeTimeout(5, TimeUnit.SECONDS)
-        .readTimeout(5, TimeUnit.SECONDS);
-
-    LOG.info("Starting new line messaging service TLSv1.3...");
+    LOG.info("Starting line messaging service...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
-        .okHttpClientBuilder(enableTls12(client))
+        .okHttpClientBuilder(customSslContext(new OkHttpClient.Builder()))
         .build();
   }
 
-  public static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client) {
+  public static OkHttpClient.Builder customSslContext(OkHttpClient.Builder client) {
     try {
       TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
           TrustManagerFactory.getDefaultAlgorithm());
@@ -98,21 +88,27 @@ public final class BotHelper {
       }
       X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
-      SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
+      SSLContext sslContext = SSLContext.getInstance("TLS");
       sslContext.init(null, new TrustManager[] {trustManager}, null);
-      SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-      client.sslSocketFactory(sslSocketFactory, trustManager);
+      SSLSocketFactory sslSocketFactory
+          = new DelegatingSSLSocketFactory(sslContext.getSocketFactory()) {
+        @Override protected SSLSocket configureSocket(SSLSocket socket) throws IOException {
+          socket.setEnabledProtocols(new String[] {
+              TlsVersion.TLS_1_0.javaName(),
+              TlsVersion.TLS_1_1.javaName(),
+              TlsVersion.TLS_1_2.javaName()
+          });
+          return socket;
+        }
+      };
+      client
+          .sslSocketFactory(sslSocketFactory, trustManager)
+          .retryOnConnectionFailure(false)
+          .cache(null)
+          .connectTimeout(5, TimeUnit.SECONDS)
+          .writeTimeout(5, TimeUnit.SECONDS)
+          .readTimeout(5, TimeUnit.SECONDS);
 
-      ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-          .tlsVersions(TlsVersion.TLS_1_3)
-          .build();
-
-      List<ConnectionSpec> specs = new ArrayList<>();
-      specs.add(cs);
-      specs.add(ConnectionSpec.COMPATIBLE_TLS);
-      specs.add(ConnectionSpec.CLEARTEXT);
-
-      client.connectionSpecs(specs);
     } catch (Exception exc) {
       LOG.error("Error while setting TLSv1.3 {}", exc.getMessage());
     }
