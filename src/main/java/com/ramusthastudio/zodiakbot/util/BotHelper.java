@@ -89,6 +89,10 @@ public final class BotHelper {
       X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
       SSLContext sslContext = SSLContext.getInstance("TLS");
+      if ("IBM J9 VM".equals(System.getProperty("java.vm.name"))) {
+        sslContext = SSLContext.getInstance("SSL");
+      }
+      LOG.info("Ssl Context " + System.getProperty("java.vm.name"));
       sslContext.init(null, new TrustManager[] {trustManager}, null);
       SSLSocketFactory sslSocketFactory
           = new DelegatingSSLSocketFactory(sslContext.getSocketFactory()) {
