@@ -1,7 +1,6 @@
 package com.ramusthastudio.zodiakbot.util;
 
 import com.linecorp.bot.client.LineMessagingService;
-import com.linecorp.bot.client.LineMessagingServiceBuilder;
 import com.linecorp.bot.model.Multicast;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
@@ -14,6 +13,7 @@ import com.linecorp.bot.model.message.template.ConfirmTemplate;
 import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
+import com.ramusthastudio.zodiakbot.http.NewLineMessagingServiceBuilder;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -79,8 +79,8 @@ public final class BotHelper {
         .writeTimeout(5, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS);
 
-    LOG.info("Starting line messaging service to SSL_TLSv2...");
-    return LineMessagingServiceBuilder
+    LOG.info("Starting new line messaging service to SSL_TLSv2...");
+    return NewLineMessagingServiceBuilder
         .create(aChannelAccessToken)
         .okHttpClientBuilder(enableTls12(client))
         .build();
