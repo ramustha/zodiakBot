@@ -79,10 +79,10 @@ public final class BotHelper {
         .writeTimeout(5, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS);
 
-    LOG.info("Starting new line messaging service to SSL_TLSv2...");
+    LOG.info("Starting new line messaging service...");
     return NewLineMessagingServiceBuilder
         .create(aChannelAccessToken)
-        .okHttpClientBuilder(enableTls12(client))
+        // .okHttpClientBuilder(enableTls12(client))
         .build();
   }
 
