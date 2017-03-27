@@ -69,10 +69,10 @@ public final class BotHelper {
   public static final String KEY_AMA = "ama";
 
   private static LineMessagingService lineServiceBuilder(String aChannelAccessToken) {
-    LOG.info("Starting new line messaging service...");
+    LOG.info("Starting line messaging service...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
-        // .okHttpClientBuilder(customSslContext(new OkHttpClient.Builder()))
+        .okHttpClientBuilder(customSslContext(new OkHttpClient.Builder()))
         .build();
   }
 
