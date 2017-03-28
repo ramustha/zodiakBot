@@ -189,7 +189,7 @@ public final class BotHelper {
     String greeting = "Hi manteman\n";
     greeting += "Makasih aku udah di invite disini!\n";
     greeting += "Aku Zodi, bot yang bisa membaca zodiak dari nama dan tanggal lahir, ";
-    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang,";
+    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang, ";
     greeting += "kamu tinggal tulis aja nama dan tanggal lahir kamu seperti ini : ramalan dadang 27-03-1991\n\n";
     greeting += "Kalau kamu suka dengan aku, bantuin aku donk supaya punya banyak teman, ini id aku @yjb9380i";
     stickerMessage(aChannelAccessToken, aUserId, new StickerHelper.StickerMsg(JAMES_STICKER_TWO_THUMBS));
@@ -201,7 +201,7 @@ public final class BotHelper {
     String greeting = "Hi " + userProfile.getDisplayName() + "\n";
     greeting += "Makasih udah nambahin aku sebagai teman!\n";
     greeting += "Aku Zodi, bot yang bisa membaca zodiak dari nama dan tanggal lahir, ";
-    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang,";
+    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang, ";
     greeting += "kamu tinggal tulis aja nama dan tanggal lahir kamu seperti ini : ramalan dadang 27-03-1991\n\n";
     greeting += "Kalau kamu suka dengan aku, bantuin aku donk supaya punya banyak teman, ini id aku @yjb9380i";
     stickerMessage(aChannelAccessToken, aUserId, new StickerHelper.StickerMsg(JAMES_STICKER_TWO_THUMBS));

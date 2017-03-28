@@ -255,7 +255,7 @@ public class LineBotController {
 
         .append("Hasil Ramalan kamu").append("\n\n")
         .append("Umum : ").append("\n").append(aDaily.getGeneral()).append("\n\n")
-        .append("Percintaan :").append("\n")
+
         .append("Buat single : ").append("\n").append(aDaily.getRomance().getSingle()).append("\n")
         .append("Buat couple : ").append("\n").append(aDaily.getRomance().getCouple()).append("\n\n")
 
@@ -279,7 +279,6 @@ public class LineBotController {
         .append("Usia : ").append(aResult.getAge()).append("\n")
         .append("Zodiak : ").append(aResult.getZodiac()).append("\n\n")
 
-        .append("Percintaan :").append("\n")
         .append("Buat single : ").append("\n").append(aDaily.getRomance().getSingle()).append("\n")
         .append("Buat couple : ").append("\n").append(aDaily.getRomance().getCouple());
   }
