@@ -71,15 +71,9 @@ public final class BotHelper {
 
   private static LineMessagingService lineServiceBuilder(String aChannelAccessToken) {
     OkHttpClient.Builder client = new OkHttpClient.Builder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .retryOnConnectionFailure(true)
-        .cache(null)
-        .connectTimeout(5, TimeUnit.SECONDS)
-        .writeTimeout(5, TimeUnit.SECONDS)
-        .readTimeout(5, TimeUnit.SECONDS);
+        .retryOnConnectionFailure(false);
 
-    LOG.info("Starting line messaging service TLSv1.2...");
+    LOG.info("Starting line messaging service...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
         .okHttpClientBuilder(enableTls12(client))
@@ -98,13 +92,13 @@ public final class BotHelper {
       }
       X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
-      SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+      SSLContext sslContext = SSLContext.getInstance("TLS");
       sslContext.init(null, new TrustManager[] {trustManager}, null);
       SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
       client.sslSocketFactory(sslSocketFactory, trustManager);
 
       ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-          .tlsVersions(TlsVersion.TLS_1_2)
+          .tlsVersions(TlsVersion.TLS_1_0)
           .build();
 
       List<ConnectionSpec> specs = new ArrayList<>();
