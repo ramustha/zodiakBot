@@ -76,7 +76,7 @@ public final class BotHelper {
     LOG.info("Starting line messaging service...");
     return LineMessagingServiceBuilder
         .create(aChannelAccessToken)
-        .okHttpClientBuilder(enableTls12(client))
+        // .okHttpClientBuilder(enableTls12(client))
         .build();
   }
 

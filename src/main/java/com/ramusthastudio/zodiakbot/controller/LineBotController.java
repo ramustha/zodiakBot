@@ -1,6 +1,7 @@
 package com.ramusthastudio.zodiakbot.controller;
 
 import com.google.gson.Gson;
+import com.linecorp.bot.client.LineSignatureValidator;
 import com.ramusthastudio.zodiakbot.model.Events;
 import com.ramusthastudio.zodiakbot.model.Message;
 import com.ramusthastudio.zodiakbot.model.Payload;
@@ -54,8 +55,8 @@ public class LineBotController {
     LOG.info("Payload: {} ", aPayload);
 
     LOG.info("The Signature is: {} ", (aXLineSignature != null && aXLineSignature.length() > 0) ? aXLineSignature : "N/A");
-    // final boolean valid = new LineSignatureValidator(fChannelSecret.getBytes()).validateSignature(aPayload.getBytes(), aXLineSignature);
-    // LOG.info("The Signature is: {} ", valid ? "valid" : "tidak valid");
+    final boolean valid = new LineSignatureValidator(fChannelSecret.getBytes()).validateSignature(aPayload.getBytes(), aXLineSignature);
+    LOG.info("The Signature is: {} ", valid ? "valid" : "tidak valid");
 
     LOG.info("Start getting payload ");
     try {
