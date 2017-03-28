@@ -11,14 +11,14 @@ public class Result {
   private String age;
   @SerializedName("zodiak")
   private String zodiac;
-  @SerializedName("ramalan")
-  private Prediction prediction;
+  // @SerializedName("ramalan")
+  // private Prediction prediction;
 
   public String getName() { return name; }
   public String getDate() { return date; }
   public String getAge() { return age; }
   public String getZodiac() { return zodiac; }
-  public Prediction getPrediction() { return prediction; }
+  // public Prediction getPrediction() { return prediction; }
 
   public Result setName(String aName) {
     name = aName;
@@ -36,10 +36,10 @@ public class Result {
     zodiac = aZodiac;
     return this;
   }
-  public Result setPrediction(Prediction aPrediction) {
-    prediction = aPrediction;
-    return this;
-  }
+  // public Result setPrediction(Prediction aPrediction) {
+  //   prediction = aPrediction;
+  //   return this;
+  // }
 
   @Override public String toString() {
     return "Result{" +
@@ -47,7 +47,7 @@ public class Result {
         ", date='" + date + '\'' +
         ", age='" + age + '\'' +
         ", zodiac='" + zodiac + '\'' +
-        ", prediction=" + prediction +
+        ", prediction=" +
         '}';
   }
 }
