@@ -127,7 +127,7 @@ public class LineBotController {
                 pushMessage(fChannelAccessToken, aUserId, "Aku gak ngerti kamu tulis apa");
                 instructionTweetsMessage(fChannelAccessToken, aUserId);
               } else {
-                if (candidates[0].trim().length() > 3) {
+                if (candidates[0].trim().length() < 3) {
                   pushMessage(fChannelAccessToken, aUserId, "Nama kamu irit banget nih");
                 }
                 if (candidates[1].trim().length() != 10) {

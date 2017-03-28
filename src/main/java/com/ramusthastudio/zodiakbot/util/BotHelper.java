@@ -269,7 +269,7 @@ public final class BotHelper {
         .create();
 
     Retrofit retrofit = new Retrofit.Builder().baseUrl(aBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create(gson)).build();
+        .addConverterFactory(GsonConverterFactory.create()).build();
     return retrofit.create(ZodiakService.class);
   }
 

@@ -4,35 +4,35 @@ import com.google.gson.annotations.SerializedName;
 
 public class Result {
   @SerializedName("nama")
-  private String name;
+  private Object name;
   @SerializedName("lahir")
-  private String date;
+  private Object date;
   @SerializedName("usia")
-  private String age;
+  private Object age;
   @SerializedName("zodiak")
-  private String zodiac;
+  private Object zodiac;
   // @SerializedName("ramalan")
   // private Prediction prediction;
 
-  public String getName() { return name; }
-  public String getDate() { return date; }
-  public String getAge() { return age; }
-  public String getZodiac() { return zodiac; }
+  public Object getName() { return name; }
+  public Object getDate() { return date; }
+  public Object getAge() { return age; }
+  public Object getZodiac() { return zodiac; }
   // public Prediction getPrediction() { return prediction; }
 
-  public Result setName(String aName) {
+  public Result setName(Object aName) {
     name = aName;
     return this;
   }
-  public Result setDate(String aDate) {
+  public Result setDate(Object aDate) {
     date = aDate;
     return this;
   }
-  public Result setAge(String aAge) {
+  public Result setAge(Object aAge) {
     age = aAge;
     return this;
   }
-  public Result setZodiac(String aZodiac) {
+  public Result setZodiac(Object aZodiac) {
     zodiac = aZodiac;
     return this;
   }

@@ -7,6 +7,6 @@ import retrofit2.http.Query;
 
 public interface ZodiakService {
 
-  @GET("/zodiak")
+  @GET("zodiak")
   Call<Result> zodiac(@Query("nama") String aNama, @Query("tgl") String aDate);
 }
