@@ -1,5 +1,7 @@
 package com.ramusthastudio.zodiakbot.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.linecorp.bot.client.LineMessagingService;
 import com.linecorp.bot.client.LineMessagingServiceBuilder;
 import com.linecorp.bot.model.Multicast;
@@ -262,8 +264,12 @@ public final class BotHelper {
   }
 
   public static ZodiakService createdService(String aBaseUrl) {
+    Gson gson = new GsonBuilder()
+        .setLenient()
+        .create();
+
     Retrofit retrofit = new Retrofit.Builder().baseUrl(aBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create()).build();
+        .addConverterFactory(GsonConverterFactory.create(gson)).build();
     return retrofit.create(ZodiakService.class);
   }
 

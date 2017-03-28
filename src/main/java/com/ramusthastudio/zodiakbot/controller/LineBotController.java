@@ -138,7 +138,7 @@ public class LineBotController {
                   String tgl = candidates[1].trim();
                   LOG.info("Nama {}, tanggal {}", name, tgl);
                   Response<Result> zodiac = getZodiac(fBaseUrl, name, tgl);
-                  LOG.info("PopularMovies code {} message {}", zodiac.code(), zodiac.message());
+                  LOG.info("zodiac code {} message {}", zodiac.code(), zodiac.message());
 
                   Result result = zodiac.body();
                   LOG.info("Name {} {} {} {}", result.getName(), result.getAge(), result.getDate(), result.getZodiac());
