@@ -136,6 +136,7 @@ public class LineBotController {
                 } else {
                   String name = candidates[0].trim();
                   String tgl = candidates[1].trim();
+                  StringBuilder zodiacBuilder = new StringBuilder();
                   LOG.info("Nama {}, tanggal {}", name, tgl);
                   Response<Result> zodiac = getZodiac(fBaseUrl, name, tgl);
                   LOG.info("zodiac code {} message {}", zodiac.code(), zodiac.message());
@@ -147,7 +148,20 @@ public class LineBotController {
                   Daily daily = prediction.getDaily();
                   Weekly weekly = prediction.getWeekly();
                   LOG.info("daily {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
-                  LOG.info("weekly {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
+                  LOG.info("weekly {} {} {}", weekly.getGeneral(), weekly.getRomance(), weekly.getFinance());
+
+                  zodiacBuilder.append("Nama : ").append(result.getName())
+                      .append("Lahir : ").append(result.getDate())
+                      .append("Usia : ").append(result.getAge())
+                      .append("Zodiak : ").append(result.getZodiac()).append("\n\n")
+                      .append("Ramalan : ").append("\n")
+                      .append("Umum : ").append(daily.getGeneral()).append("\n")
+                      .append("Percintaan : ").append("\n")
+                      .append("Buat single : ").append(daily.getRomance().getSingle()).append("\n")
+                      .append("Buat couple : ").append(daily.getRomance().getCouple()).append("\n")
+                      .append("Keuangan : ").append(daily.getFinance());
+
+                  pushMessage(fChannelAccessToken, aUserId, zodiacBuilder.toString());
                 }
               }
             }
