@@ -64,9 +64,8 @@ public final class BotHelper {
   public static final String MESSAGE_LOCATION = "location";
   public static final String MESSAGE_STICKER = "sticker";
 
-  public static final String KEY_ZODIAC = "zodiak";
-  public static final String KEY_PREDICTION = "ramalan";
-  public static final String KEY_GENERAL = "general";
+  public static final String KEY_ZODIAC = "ramalan";
+  public static final String KEY_GENERAL = "umum";
   public static final String KEY_ROMANCE = "percintaan";
   public static final String KEY_FINANCE = "keuangan";
 
@@ -189,11 +188,10 @@ public final class BotHelper {
   public static void greetingMessageGroup(String aChannelAccessToken, String aUserId) throws IOException {
     String greeting = "Hi manteman\n";
     greeting += "Makasih aku udah di invite disini!\n";
-    greeting += "sentiment atau pendapat orang tentang apapun di dalam dunia twitter, ";
-    greeting += "selain sentiment aku juga bisa baca personality nya lho.\n\n";
-    greeting += "Personality menggambarkan karakter seseorang dari sebuah tulisan atau pun sosial media, ";
-    greeting += "saat ini aku hanya bisa membaca karakter seseorang lewat tweets ataupun tulisan dalam sebuah file.\n\n";
-    greeting += "Bantuin aku donk supaya punya banyak teman, ini id aku @ape3119w";
+    greeting += "Aku Zodi, bot yang bisa membaca zodiak dari nama dan tanggal lahir, ";
+    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang,";
+    greeting += "kamu tinggal tulis aja nama dan tanggal lahir kamu seperti ini : zodiak dadang 27-03-1991\n\n";
+    greeting += "Kalau kamu suka dengan aku, bantuin aku donk supaya punya banyak teman, ini id aku @yjb9380i";
     stickerMessage(aChannelAccessToken, aUserId, new StickerHelper.StickerMsg(JAMES_STICKER_TWO_THUMBS));
     pushMessage(aChannelAccessToken, aUserId, greeting);
   }
