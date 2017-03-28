@@ -241,8 +241,7 @@ public class LineBotController {
         }
 
         pushMessage(fChannelAccessToken, aUserId, zodiacBuilder.toString());
-
-        generateRandomMessage(aUserId);
+        generateRandomMessage(aUserId, aFlag);
       }
     }
   }
@@ -295,17 +294,35 @@ public class LineBotController {
         .append("Keuangan : ").append("\n").append(aDaily.getFinance());
   }
 
-  private void generateRandomMessage(String aUserId) throws IOException {
+  private void generateRandomMessage(String aUserId, String aFlag) throws IOException {
     if (generateRandom(0, 5) > 2) {
       pushMessage(fChannelAccessToken, aUserId, "Kalau kamu suka sama aku, tolong donk bantu invite supaya aku banyak teman, ini id aku @yjb9380i");
     }
-
-    if (generateRandom(0, 5) > 2) {
-      pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan secara umum tulis aja umum reza 20-05-1990");
-    } else if (generateRandom(5, 10) > 5) {
-      pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan percintaan tulis aja percintaan reza 20-05-1990");
-    } else {
-      pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan keuangan tulis aja keuangan reza 20-05-1990");
+    switch (aFlag) {
+      case KEY_ZODIAC:
+        if (generateRandom(0, 5) > 2) {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan secara umum tulis aja umum reza 20-05-1990");
+        } else if (generateRandom(5, 10) > 5) {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan percintaan tulis aja percintaan reza 20-05-1990");
+        } else {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan keuangan tulis aja keuangan reza 20-05-1990");
+        }
+        break;
+      case KEY_GENERAL:
+        if (generateRandom(0, 5) > 2) {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan percintaan tulis aja percintaan reza 20-05-1990");
+        }
+        break;
+      case KEY_FINANCE:
+        if (generateRandom(0, 5) > 2) {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan secara umum tulis aja umum reza 20-05-1990");
+        }
+        break;
+      case KEY_ROMANCE:
+        if (generateRandom(0, 5) > 2) {
+          pushMessage(fChannelAccessToken, aUserId, "Kamu pengen ramalan secara umum tulis aja umum reza 20-05-1990");
+        }
+        break;
     }
   }
 
