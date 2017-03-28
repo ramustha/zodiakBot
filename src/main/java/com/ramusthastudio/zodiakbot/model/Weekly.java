@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class Weekly {
   @SerializedName("umum")
-  private String general;
+  private Object general;
   @SerializedName("percintaan")
   private Romance romance;
   @SerializedName("karir_keuangan")
-  private String finance;
+  private Object finance;
 
-  public String getGeneral() { return general; }
+  public Object getGeneral() { return general; }
   public Romance getRomance() { return romance; }
-  public String getFinance() { return finance; }
+  public Object getFinance() { return finance; }
 
-  public Weekly setGeneral(String aGeneral) {
+  public Weekly setGeneral(Object aGeneral) {
     general = aGeneral;
     return this;
   }
@@ -22,7 +22,7 @@ public class Weekly {
     romance = aRomance;
     return this;
   }
-  public Weekly setFinance(String aFinance) {
+  public Weekly setFinance(Object aFinance) {
     finance = aFinance;
     return this;
   }

@@ -4,18 +4,18 @@ import com.google.gson.annotations.SerializedName;
 
 public class Romance {
   @SerializedName("single")
-  private String single;
+  private Object single;
   @SerializedName("couple")
-  private String couple;
+  private Object couple;
 
-  public String getSingle() { return single; }
-  public String getCouple() { return couple; }
+  public Object getSingle() { return single; }
+  public Object getCouple() { return couple; }
 
-  public Romance setSingle(String aSingle) {
+  public Romance setSingle(Object aSingle) {
     single = aSingle;
     return this;
   }
-  public Romance setCouple(String aCouple) {
+  public Romance setCouple(Object aCouple) {
     couple = aCouple;
     return this;
   }

@@ -143,11 +143,11 @@ public class LineBotController {
                   Result result = zodiac.body();
                   LOG.info("Name {} {} {} {}", result.getName(), result.getAge(), result.getDate(), result.getZodiac());
 
-                  // Prediction prediction = result.getPrediction();
-                  // Daily daily = prediction.getDaily();
-                  // Weekly weekly = prediction.getWeekly();
-                  // LOG.info("daily {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
-                  // LOG.info("weekly {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
+                  Prediction prediction = result.getPrediction();
+                  Daily daily = prediction.getDaily();
+                  Weekly weekly = prediction.getWeekly();
+                  LOG.info("daily {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
+                  LOG.info("weekly {} {} {}", daily.getGeneral(), daily.getRomance(), daily.getFinance());
                 }
               }
             }
