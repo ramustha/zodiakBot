@@ -17,4 +17,7 @@ public class Config {
   public String getChannelSecret() { return mEnv.getProperty("line.bot.channelSecret"); }
   @Bean(name = "line.bot.channelToken")
   public String getChannelAccessToken() { return mEnv.getProperty("line.bot.channelToken"); }
+
+  @Bean(name = "com.zodiakbot.base_url")
+  public String getBaseUrl() { return mEnv.getProperty("com.zodiakbot.base_url"); }
 }

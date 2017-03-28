@@ -9,11 +9,12 @@ import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.message.StickerMessage;
 import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
-import com.linecorp.bot.model.message.template.ButtonsTemplate;
 import com.linecorp.bot.model.message.template.ConfirmTemplate;
 import com.linecorp.bot.model.message.template.Template;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 import com.linecorp.bot.model.response.BotApiResponse;
+import com.ramusthastudio.zodiakbot.controller.ZodiakService;
+import com.ramusthastudio.zodiakbot.model.Result;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
@@ -35,7 +35,8 @@ import okhttp3.TlsVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Response;
-import twitter4j.User;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.ramusthastudio.zodiakbot.util.StickerHelper.JAMES_STICKER_TWO_THUMBS;
 
@@ -61,13 +62,11 @@ public final class BotHelper {
   public static final String MESSAGE_LOCATION = "location";
   public static final String MESSAGE_STICKER = "sticker";
 
-  public static final String KEY_TWITTER = "twitter";
-  public static final String KEY_PERSONALITY = "personality";
-  public static final String KEY_SUMMARY = "summary";
-  public static final String KEY_POSITIVE = "twitter positif";
-  public static final String KEY_NEGATIVE = "twitter negatif";
-  public static final String KEY_FRIEND = "teman";
-  public static final String KEY_AMA = "ama";
+  public static final String KEY_ZODIAC = "zodiak";
+  public static final String KEY_PREDICTION = "ramalan";
+  public static final String KEY_GENERAL = "general";
+  public static final String KEY_ROMANCE = "percintaan";
+  public static final String KEY_FINANCE = "keuangan";
 
   private static LineMessagingService lineServiceBuilder(String aChannelAccessToken) {
     OkHttpClient.Builder client = new OkHttpClient.Builder()
@@ -159,41 +158,31 @@ public final class BotHelper {
     return lineServiceBuilder(aChannelAccessToken).pushMessage(pushMessage).execute();
   }
 
-  public static Response<BotApiResponse> profileUserMessage(String aChannelAccessToken, String aUserId, User aUser) throws IOException {
-    String title = aUser.getName();
-    title = title.length() > 39 ? title.substring(0, 34) + "..." : title;
-
-    String desc = aUser.getDescription();
-    if (aUser.getDescription().isEmpty()) {
-      desc = "Gak nyantumin deskripsi";
-    } else {
-      desc = desc.length() > 59 ? desc.substring(0, 54) + "..." : desc;
-    }
-
-    LOG.info("profileUserMessage {} {} {} {} ", aUser.getOriginalProfileImageURLHttps(), title, desc, aUser.getScreenName());
-    ButtonsTemplate template = new ButtonsTemplate(
-        aUser.getOriginalProfileImageURLHttps(),
-        title,
-        desc,
-        Arrays.asList(
-            new PostbackAction("Sentiment", KEY_TWITTER + " " + aUser.getScreenName()),
-            new PostbackAction("Personality", KEY_PERSONALITY + " " + aUser.getScreenName()),
-            new PostbackAction("Summary", KEY_SUMMARY + " " + aUser.getScreenName()
-            )
-        ));
-
-    return templateMessage(aChannelAccessToken, aUserId, template);
-  }
-  public static void talkMessageGroup(String aChannelAccessToken, String aUserId) throws IOException {
-    String greeting = "Hi\n";
-    greeting += "Kenalin, aku AMA bot yang bisa membaca sentiment lewat twitter, ";
-    greeting += "sentiment atau pendapat orang tentang apapun di dalam dunia twitter, ";
-    greeting += "selain sentiment aku juga bisa baca personality nya lho.\n\n";
-    greeting += "Personality menggambarkan karakter seseorang dari sebuah tulisan atau pun sosial media, ";
-    greeting += "saat ini aku hanya bisa membaca karakter seseorang lewat tweets ataupun tulisan dalam sebuah file.";
-    stickerMessage(aChannelAccessToken, aUserId, new StickerHelper.StickerMsg(JAMES_STICKER_TWO_THUMBS));
-    pushMessage(aChannelAccessToken, aUserId, greeting);
-  }
+  // public static Response<BotApiResponse> profileUserMessage(String aChannelAccessToken, String aUserId, User aUser) throws IOException {
+  //   String title = aUser.getName();
+  //   title = title.length() > 39 ? title.substring(0, 34) + "..." : title;
+  //
+  //   String desc = aUser.getDescription();
+  //   if (aUser.getDescription().isEmpty()) {
+  //     desc = "Gak nyantumin deskripsi";
+  //   } else {
+  //     desc = desc.length() > 59 ? desc.substring(0, 54) + "..." : desc;
+  //   }
+  //
+  //   LOG.info("profileUserMessage {} {} {} {} ", aUser.getOriginalProfileImageURLHttps(), title, desc, aUser.getScreenName());
+  //   ButtonsTemplate template = new ButtonsTemplate(
+  //       aUser.getOriginalProfileImageURLHttps(),
+  //       title,
+  //       desc,
+  //       Arrays.asList(
+  //           new PostbackAction("Sentiment", KEY_TWITTER + " " + aUser.getScreenName()),
+  //           new PostbackAction("Personality", KEY_PERSONALITY + " " + aUser.getScreenName()),
+  //           new PostbackAction("Summary", KEY_SUMMARY + " " + aUser.getScreenName()
+  //           )
+  //       ));
+  //
+  //   return templateMessage(aChannelAccessToken, aUserId, template);
+  // }
 
   public static void greetingMessageGroup(String aChannelAccessToken, String aUserId) throws IOException {
     String greeting = "Hi manteman\n";
@@ -211,12 +200,10 @@ public final class BotHelper {
     UserProfileResponse userProfile = getUserProfile(aChannelAccessToken, aUserId);
     String greeting = "Hi " + userProfile.getDisplayName() + "\n";
     greeting += "Makasih udah nambahin aku sebagai teman!\n";
-    greeting += "Kenalin, aku AMA bot yang bisa membaca sentiment lewat twitter, ";
-    greeting += "sentiment atau pendapat orang tentang apapun di dalam dunia twitter, ";
-    greeting += "selain sentiment aku juga bisa baca personality nya lho.\n\n";
-    greeting += "Personality menggambarkan karakter seseorang dari sebuah tulisan atau pun sosial media, ";
-    greeting += "saat ini aku hanya bisa membaca karakter seseorang lewat tweets ataupun tulisan dalam sebuah file.\n\n";
-    greeting += "Bantuin aku donk supaya punya banyak teman, ini id aku @ape3119w";
+    greeting += "Aku Zodi, bot yang bisa membaca zodiak dari nama dan tanggal lahir, ";
+    greeting += "buat kamu yang pengen tau ramalan zodiak, percintaan, keuangan kamu hari ini caranya gampang,";
+    greeting += "kamu tinggal tulis aja nama dan tanggal lahir kamu seperti ini : zodiak dadang 27-03-1991\n\n";
+    greeting += "Kalau kamu suka dengan aku, bantuin aku donk supaya punya banyak teman, ini id aku @yjb9380i";
     stickerMessage(aChannelAccessToken, aUserId, new StickerHelper.StickerMsg(JAMES_STICKER_TWO_THUMBS));
     pushMessage(aChannelAccessToken, aUserId, greeting);
   }
@@ -228,22 +215,10 @@ public final class BotHelper {
     pushMessage(aChannelAccessToken, aUserId, greeting);
   }
 
-  public static void instructionSentimentMessage(String aChannelAccessToken, String aUserId) throws IOException {
-    String greeting = "Contoh kalau kamu pengen tau nih pendapat orang lain tentang indonesia, ";
-    greeting += "Kamu tinggal tulis sentiment 'indonesia', ";
-    greeting += "kalau pengen tau tentang karakter seseorang tulis personality 'jokowi' atau ";
-    greeting += "summary 'jokowi' buat tau pribadi 'jokowi' lebih dalam seperti apa yang 'jokowi' suka dan gak suka, ";
-    greeting += "nanti aku kumpulin infonya terus aku kasih tau ke kamu.\n\n";
-    greeting += "Kalau kamu pengen tau tentang karakter seseorang dari tulisan seseorang kamu tinggal kirim file tulisanya ke sini.\n\n";
-    greeting += "Saat ini aku cuma bisa baca tulisan pake bahasa inggris aja, untuk bahasa lain aku belum bisa.";
-    pushMessage(aChannelAccessToken, aUserId, greeting);
-  }
-
   public static void instructionTweetsMessage(String aChannelAccessToken, String aUserId) throws IOException {
     UserProfileResponse userProfile = getUserProfile(aChannelAccessToken, aUserId);
     String greeting = "Hi " + userProfile.getDisplayName() + "\n";
-    greeting += "Aku juga bisa nih lihat profile twitter orang, kamu tinggal tulis aja id twitternya\n";
-    greeting += "Contoh twitter 'dicoding'";
+    greeting += "Kamu tinggal tulis aja nama dan tanggal lahir kamu seperti ini : zodiak dadang 27-03-1991";
     pushMessage(aChannelAccessToken, aUserId, greeting);
   }
 
@@ -284,5 +259,16 @@ public final class BotHelper {
     Pattern pattern = Pattern.compile("[^a-z A-Z^0-9]");
     Matcher matcher = pattern.matcher(s);
     return matcher.replaceAll(" ");
+  }
+
+  public static ZodiakService createdService(String aBaseUrl) {
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(aBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create()).build();
+    return retrofit.create(ZodiakService.class);
+  }
+
+  public static Response<Result> getZodiac(String aBaseUrl, String aName, String aDate) throws IOException {
+    ZodiakService service = createdService(aBaseUrl);
+    return service.zodiac(aName, aDate).execute();
   }
 }
