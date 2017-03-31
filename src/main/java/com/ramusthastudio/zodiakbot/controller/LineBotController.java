@@ -101,7 +101,7 @@ public class LineBotController {
           sourceGroupProccess(eventType, replayToken, postback, message, source);
           break;
         case SOURCE_ROOM:
-          // sourceGroupProccess(eventType, replayToken, postback, message, source);
+          sourceGroupProccess(eventType, replayToken, postback, message, source);
           break;
       }
     } catch (Exception ae) {
@@ -181,6 +181,7 @@ public class LineBotController {
             } else {
               pushMessage(fChannelAccessToken, aUserId, "Aku gak ngerti nih, " +
                   "aku ini cuma bot yang bisa membaca ramalan zodiak, jadi jangan tanya yang aneh aneh dulu yah");
+              instructionTweetsMessage(fChannelAccessToken, aUserId);
             }
           } else {
             pushMessage(fChannelAccessToken, aUserId, "Aku gak ngerti nih, " +
